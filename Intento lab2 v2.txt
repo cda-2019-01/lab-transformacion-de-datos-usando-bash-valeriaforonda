@@ -1,0 +1,34 @@
+# Escriba su código aquí
+ls *.csv > lista.txt #Se crea la lista txt con el nombre de cada uno de los archivos
+x=( `cat "lista.txt" `) #Se crea la lista con los nombres
+mkdir originales #Se crea la carpeta
+for n in ${x[*]} #Se abren los datos
+do cp $n originales/$n #Se copian los archivos originales
+done #Se cierra el ciclo
+for n in ${x[*]} #Se abren los datos
+do sed -i 's/^/','/g' $n #Se agrega una coma al inicio del archivo para que me separe luego del nombre del archivo
+   sed -i 's/^/'$n'/g' $n #Se agrega el nombre del archivo a cada una de las filas de los archivos que contienen datos
+   nl $n > val$n #Se agrega el número de línea a cada línea del archivo
+done #Se cierra el ciclo
+for n in ${x[*]} #Se abren los datos
+do sed 's/^[[:space:]]*//' val$n > val2$n #Se eliminan los espacios blancos al inicio de cada línea
+   sed -e 's/[[:space:]]\+/,/g' val2$n > val3$n #Se reemplazan las tabulaciones por comas
+   awk -F',' 'BEGIN{print "count", "lineNum"}{print gsub(/,/,"") "\t" NR}' val3$n > val5$n #Cuenta el número de comas p$done #Se cierra el ciclo
+sed 's/\([a-zA-Z][0-9]\).\([a-zA-Z]*\)/\1/' lista.txt > lista2.txt #Se cambia el nombre
+v=( `cat "lista2.txt" `) #Se crea otra lista
+for n in ${v[*]} #Se abren los datos
+do ls -l | awk '{ print $1 }' val5$n.csv > cont$n.txt #Toma la primera columna del conteo de comas por línea
+   tail -n +2 cont$n.txt > cont1$n.txt #Elimina el encabezado de la columna de conteos
+   tr -s ',' '\n' < val3$n.csv > val4$n.csv #Separa el archivo en líneas
+done #Se cierra el ciclo
+mkdir repuestos #Se crea otra carpeta
+ls originales > tit.txt #Se traen los nombres
+w=( `cat "tit.txt" `) #Se crea la lista con los nombres
+for n in ${w[*]} #Se abren los datos
+do cp val4$n repuestos/val4$n #Se copian los archivos originales
+done #Se cierra el ciclo
+a=( `cat "cont1data1.txt" `) #Esto convierte en lista la columna de conteos
+b=( `cat "cont1data2.txt" `) #Esto convierte en lista la columna de conteos
+c=( `cat "cont1data3.txt" `) #Esto convierte en lista la columna de conteos
+for n in ${w[*]} #Se abren los datos
+do (awk 'NR==2' val4$n ; awk 'NR==1' val4$n ; awk 'NR==3' val4$n ;) > r$n.txt #Se crea la estructura fija para cada arc$done #Se cierra
